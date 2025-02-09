@@ -1,14 +1,14 @@
 pipeline {
     agent any
     environment {
-        AWS_REGION = 'us-west-2' 
+        AWS_REGION = 'eu-west-2' 
     }
     stages {
         stage('Set AWS Credentials') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-Jenkins' 
+                    credentialsId: 'ID' 
                 ]]) {
                     sh '''
                     echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/rofoed01/derrickWeil_jenkinsAutoScale' 
+                git branch: 'main', url: 'https://github.com/mlemonsaws1/ArmageddonLondon.git' 
             }
         }
         stage('Initialize Terraform') {
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-Jenkins'
+                    credentialsId: 'ID'
                 ]]) {
                     sh '''
                     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
@@ -48,7 +48,7 @@ pipeline {
                 input message: "Approve Terraform Apply?", ok: "Deploy"
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-Jenkins'
+                    credentialsId: 'ID'
                 ]]) {
                     sh '''
                     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
@@ -63,7 +63,7 @@ pipeline {
                 input message: "Do you want to destroy the infrastructure?", ok: "Destroy"
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS-Jenkins'
+                    credentialsId: 'ID'
                 ]]) {
                     sh '''
                     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
